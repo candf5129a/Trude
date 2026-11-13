@@ -1,30 +1,37 @@
 # Trude
 
-Trude is a mobile-first social app work in progress. This build uses a local Node server and SQLite database so a small group on the same Wi-Fi can create test accounts and share posts, likes, comments, follows, and lobby chats.
+Trude is a mobile-first social app prototype. It runs as a web app with a Node server and local SQLite storage.
 
-## Run the shared test build
+## Run from VS Code
 
-Requires Node.js 24 or newer (built-in node:sqlite; no npm packages required).
+1. Open this folder in VS Code.
+2. Open **Terminal → New Terminal**.
+3. Run `node server.js` (Node.js 24 or newer).
+4. On this computer, open `http://localhost:4173`.
+5. On a phone connected to the same Wi-Fi, open `http://192.168.1.120:4173`. If the address changes, run `ipconfig` in the VS Code terminal and use the Wi-Fi IPv4 address.
+6. Keep the terminal/server running while people test. If Windows asks, allow Node on your private network.
 
-```powershell
-node server.js
-```
+Anyone on that Wi-Fi can create a separate test account. The SQLite database stays on this computer and survives reloads and server restarts. This is a local network test, not a public internet deployment. Use test contact details and a password you do not use elsewhere. Email/phone ownership is not verified. Password reset shows a test code in the app; it does not send email or SMS.
 
-Open http://localhost:4173. For testers on the same Wi-Fi, share http://<this-computer-LAN-address>:4173. Keep this as a small test environment; it uses HTTP and local SQLite storage.
+## What testers can try
 
-## Available in this build
+- Create an account or sign in; likes, comments, posts, follows, profile settings, and lobby chat are stored in SQLite.
+- Double-tap a post to like, draw a C to open comments, or hold a post to open its actions.
+- Browse Explore and open creator profiles. The profile Inbox supports persistent one-to-one text messages between test accounts.
+- Tap **Chats** for the message inbox. Press and hold **Chats** for three seconds to open the separate room directory and hosted lobbies.
+- Swipe horizontally between Home, Explore, Chats, and Profile. The Create button stays in the bottom bar and spins during the Explore/Chats transition.
+- Upload photos/video, capture from the device camera, compose text, or record/import audio. Unfinished text and small media drafts are saved in that browser’s local storage; larger media may need to be selected again after resuming a draft.
+- Join or host a room, invite people, chat, and try the included prompt games.
 
-- Create and sign into a test account with an email address or mobile number plus a password. Likes, follows, posts, comments, profiles, and room messages persist in SQLite and are shared between users connected to this server.
-- Start a post by double-tapping to like, drawing a C to open comments, or holding a post to see its action sheet.
-- Search creators and posts, visit profiles, follow people, save and share posts, set an account private, and view profile analytics.
-- Join a random lobby, host a room with a selected capacity and duration, invite people with a room link, and chat with users who join. Lobby messages refresh between clients about every two seconds.
-- Open Chats by pressing and holding Lobby for three seconds.
-- Import/capture a photo or video, use basic visual filters, create text posts, and record or import an audio post.
-- Start a local camera/screen preview for the LIVE setup flow; it does not broadcast to viewers.
+## Phone camera and microphone
 
-## Still needs provider or streaming setup
+Mobile camera and microphone access generally requires HTTPS or `localhost`. The Wi-Fi URL above uses HTTP, so use it to test accounts, posts, profiles, messages, and rooms; camera and microphone may be blocked by the browser. On the computer, `http://localhost:4173` is a secure context in current browsers. An HTTPS test URL can be added before mobile camera testing.
 
-- Test accounts do not verify email or phone ownership. Gmail address plus password is a test login, not Google OAuth. Configure Google OAuth, SMS, and email delivery before using real contact details.
-- Password reset works in local test mode by showing a one-time code in the browser; no email or SMS is sent.
-- Multi-device live video, real-time co-host grids, AI image generation, licensed music, advanced video trimming/export, processed audio effects, and cash rewards are not connected.
-- data/trude.sqlite contains test user data and is ignored by Git. Do not commit it or reuse this HTTP setup for production.
+## Prototype limits
+
+- Google OAuth and email/SMS delivery are not configured.
+- LIVE creates a room and provides a local camera/screen preview, but does not broadcast to other users.
+- AI image generation, licensed music, advanced editing/export, and real-money rewards need provider integrations.
+- Chats currently support text messages only. The local prototype does not provide end-to-end encryption or production moderation, notifications, or backups.
+
+`data/trude.sqlite` is ignored by Git and is stored on the computer running the server.
