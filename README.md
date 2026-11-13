@@ -1,18 +1,30 @@
 # Trude
 
-A mobile-first social prototype for short-form content, small group lobbies, casual games, and creator rewards.
+Trude is a mobile-first social app work in progress. This build uses a local Node server and SQLite database so a small group on the same Wi-Fi can create test accounts and share posts, likes, comments, follows, and lobby chats.
 
-## Run locally
+## Run the shared test build
 
-This is a static app. From the project folder, run `python -m http.server 4173` and open `http://localhost:4173`. To let friends on the same Wi-Fi try it, run `python -m http.server 4173 --bind 0.0.0.0` and share your computer's local network address with them.
+Requires Node.js 24 or newer (built-in node:sqlite; no npm packages required).
 
-## Prototype interactions
+```powershell
+node server.js
+```
 
-- Scroll the feed, like, comment, follow, and share.
-- Search creators and browse trend cards.
-- Tap or hold the center button to open the six creation actions.
-- Join a simulated lobby, chat, leave, or wait for its 30-minute timer.
-- Play the truth-or-tiny-dare and other prompt games.
-- Earn local demo points by playing and posting; the balance is stored in this browser.
+Open http://localhost:4173. For testers on the same Wi-Fi, share http://<this-computer-LAN-address>:4173. Keep this as a small test environment; it uses HTTP and local SQLite storage.
 
-Live video, multi-user chat matching, accounts, and cash conversion need server services and are represented as local demos. Reward points currently have no cash value. Do not enter real personal, payment, or child safety data into this prototype.
+## Available in this build
+
+- Create and sign into a test account with an email address or mobile number plus a password. Likes, follows, posts, comments, profiles, and room messages persist in SQLite and are shared between users connected to this server.
+- Start a post by double-tapping to like, drawing a C to open comments, or holding a post to see its action sheet.
+- Search creators and posts, visit profiles, follow people, save and share posts, set an account private, and view profile analytics.
+- Join a random lobby, host a room with a selected capacity and duration, invite people with a room link, and chat with users who join. Lobby messages refresh between clients about every two seconds.
+- Open Chats by pressing and holding Lobby for three seconds.
+- Import/capture a photo or video, use basic visual filters, create text posts, and record or import an audio post.
+- Start a local camera/screen preview for the LIVE setup flow; it does not broadcast to viewers.
+
+## Still needs provider or streaming setup
+
+- Test accounts do not verify email or phone ownership. Gmail address plus password is a test login, not Google OAuth. Configure Google OAuth, SMS, and email delivery before using real contact details.
+- Password reset works in local test mode by showing a one-time code in the browser; no email or SMS is sent.
+- Multi-device live video, real-time co-host grids, AI image generation, licensed music, advanced video trimming/export, processed audio effects, and cash rewards are not connected.
+- data/trude.sqlite contains test user data and is ignored by Git. Do not commit it or reuse this HTTP setup for production.
