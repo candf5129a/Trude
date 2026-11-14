@@ -2,7 +2,8 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-  <meta name="theme-color" content="#101014"><title>Trude — Make a little noise</title>
+  <meta name="theme-color" content="#101014"><meta name="description" content="Trude — make a little noise, meet your people, and share little moments."><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><title>Trude — Make a little noise</title>
+  <link rel="manifest" href="/manifest.webmanifest"><link rel="icon" href="/icons/trude.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/icons/trude-192.png">
   <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
@@ -26,5 +27,5 @@
     <div id="create-wheel" class="create-wheel hidden"><div class="wheel-backdrop"></div><div class="wheel-header"><span class="eyebrow">MAKE SOMETHING</span><b>What's the vibe?</b></div><div class="wheel-options"><button data-create="Live"><span class="option-icon live-icon">●</span><b>Live</b><small>Go live</small></button><button data-create="Video"><span class="option-icon video-icon">▶</span><b>Video</b><small>Make a clip</small></button><button data-create="Image"><span class="option-icon image-icon">▧</span><b>Image</b><small>Share a photo</small></button><button data-create="Text"><span class="option-icon text-icon">Aa</span><b>Text</b><small>Say a thing</small></button><button data-create="Audio"><span class="option-icon audio-icon">♫</span><b>Audio</b><small>Use your voice</small></button><button data-create="Game"><span class="option-icon game-icon">✳</span><b>Game</b><small>Play together</small></button></div><button class="wheel-close" id="close-wheel">× &nbsp; Tap to close</button></div>
     <div id="modal" class="modal hidden"><div class="modal-scrim"></div><div class="modal-panel" id="modal-panel"></div></div>
     <div id="toast" class="toast"></div>
-  </main><script src="app.js"></script><script src="truth-dare.js"></script>
+  </main><script src="app.js"></script><script src="truth-dare.js"></script><script src="pwa.js"></script>
 </body></html>

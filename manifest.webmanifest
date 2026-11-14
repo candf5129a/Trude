@@ -1,0 +1,32 @@
+{
+  "id": "/",
+  "name": "Trude — Make a little noise",
+  "short_name": "Trude",
+  "description": "Meet your people, share little moments and play together.",
+  "start_url": "/#home",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#101014",
+  "theme_color": "#101014",
+  "icons": [
+    {
+      "src": "/icons/trude-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/trude-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icons/trude.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

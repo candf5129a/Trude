@@ -360,6 +360,8 @@ async function api(req, res, url) {
 const assets = new Map([
  ['/',['index.html','text/html; charset=utf-8']], ['/index.html',['index.html','text/html; charset=utf-8']],
  ['/styles.css',['styles.css','text/css; charset=utf-8']], ['/app.js',['app.js','text/javascript; charset=utf-8']], ['/truth-dare.js',['truth-dare.js','text/javascript; charset=utf-8']],
+ ['/pwa.js',['pwa.js','text/javascript; charset=utf-8']], ['/sw.js',['sw.js','text/javascript; charset=utf-8']],
+ ['/manifest.webmanifest',['manifest.webmanifest','application/manifest+json; charset=utf-8']], ['/icons/trude.svg',['icons/trude.svg','image/svg+xml']], ['/icons/trude-192.png',['icons/trude-192.png','image/png']], ['/icons/trude-512.png',['icons/trude-512.png','image/png']],
 ]);
 const server=http.createServer(async(req,res)=>{
   const url=new URL(req.url,'http://localhost');
