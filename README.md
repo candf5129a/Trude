@@ -1,37 +1,44 @@
 # Trude
 
-Trude is a mobile-first social app prototype. It runs as a web app with a Node server and local SQLite storage.
+Trude is a mobile-first social app prototype. It uses a small Node.js server and a local SQLite database for friend-and-family testing.
 
-## Run from VS Code
+## Open it on your phone from VS Code
 
-1. Open this folder in VS Code.
-2. Open **Terminal → New Terminal**.
-3. Run `node server.js` (Node.js 24 or newer).
-4. On this computer, open `http://localhost:4173`.
-5. On a phone connected to the same Wi-Fi, open `http://192.168.1.120:4173`. If the address changes, run `ipconfig` in the VS Code terminal and use the Wi-Fi IPv4 address.
-6. Keep the terminal/server running while people test. If Windows asks, allow Node on your private network.
+1. Install Node.js 24 or newer and open this repository in VS Code.
+2. Choose **Terminal → New Terminal**.
+3. Start the current shared test server with `$env:PORT='4175'; node server.js`. Keep this terminal running.
+4. Connect your phone and computer to the same Wi-Fi. On Android, open Chrome and visit **http://192.168.1.120:4175**. If the address changes, run `ipconfig` on the computer and use its Wi-Fi IPv4 address with `:4175` at the end.
+5. If Windows asks, allow Node.js through the firewall on your **Private** network. Create separate test accounts on each device to try posts, follows, chats, and lobbies.
+6. Press **Ctrl+C** in the VS Code terminal when you want to stop the local server.
 
-Anyone on that Wi-Fi can create a separate test account. The SQLite database stays on this computer and survives reloads and server restarts. This is a local network test, not a public internet deployment. Use test contact details and a password you do not use elsewhere. Email/phone ownership is not verified. Password reset shows a test code in the app; it does not send email or SMS.
+This URL works only for devices on the same network. The local app is not yet a phone-installable PWA; a public HTTPS URL and app manifest/service worker are needed for an install-style home-screen experience. Mobile camera and microphone APIs also require HTTPS or localhost, so those may be blocked on the LAN HTTP URL.
 
-## What testers can try
+## Keep a test server running for people outside your Wi-Fi
 
-- Create an account or sign in; likes, comments, posts, follows, profile settings, and lobby chat are stored in SQLite.
-- Double-tap a post to like, draw a C to open comments, or hold a post to open its actions.
-- Browse Explore and open creator profiles. The profile Inbox supports persistent one-to-one text messages between test accounts.
-- Tap **Chats** for the message inbox. Press and hold **Chats** for three seconds to open the separate room directory and hosted lobbies.
-- Swipe horizontally between Home, Explore, Chats, and Profile. The Create button stays in the bottom bar and spins during the Explore/Chats transition.
-- Upload photos/video, capture from the device camera, compose text, or record/import audio. Unfinished text and small media drafts are saved in that browser’s local storage; larger media may need to be selected again after resuming a draft.
-- Join or host a room, invite people, chat, and try the included prompt games.
+The repository now includes `npm start` and declares Node.js 24+. To host a closed feedback test, connect this GitHub repository to a paid Render Web Service, set the build command to `npm install`, and the start command to `npm start`. Render supplies HTTPS and a public URL. The current SQLite database and uploaded media need a persistent disk mounted at the app's `data` directory; this is for a single service instance. Before inviting testers, add sign-up protections, moderation/report handling, backups, rate limits, and privacy/terms pages.
 
-## Phone camera and microphone
+Do not use a Render free Web Service for durable testing: free services can sleep and have an ephemeral filesystem. Persistent disks preserve local files, but Render does not allow a disk-backed service to scale to multiple instances. See [Render persistent disks](https://render.com/docs/disks), [Render scaling](https://render.com/docs/scaling), and [Render free-service limits](https://render.com/docs/free).
 
-Mobile camera and microphone access generally requires HTTPS or `localhost`. The Wi-Fi URL above uses HTTP, so use it to test accounts, posts, profiles, messages, and rooms; camera and microphone may be blocked by the browser. On the computer, `http://localhost:4173` is a secure context in current browsers. An HTTPS test URL can be added before mobile camera testing.
+## What the prototype supports
 
-## Prototype limits
+- Local account creation and sign-in, posts, likes, comments, follows, profiles, direct text messages, and lobby text chat stored in SQLite.
+- Chats opens the inbox. Press and hold **Chats** for three seconds to reveal the lobby directory.
+- Lobby directory shows open rooms with free seats first and popular hosts second; both rows scroll horizontally.
+- In a lobby, tap the dice icon for the game list or press and hold it for three seconds. Lobby score records are stored per room in SQLite.
+- Camera preview filters now apply to the camera and uploaded/captured media preview; LIVE preview filters and the soft-focus control apply to its local preview. Filters are basic visual CSS effects, not segmentation or face-tracked effects.
 
-- Google OAuth and email/SMS delivery are not configured.
-- LIVE creates a room and provides a local camera/screen preview, but does not broadcast to other users.
-- AI image generation, licensed music, advanced editing/export, and real-money rewards need provider integrations.
-- Chats currently support text messages only. The local prototype does not provide end-to-end encryption or production moderation, notifications, or backups.
+## 10,000-user capacity
 
-`data/trude.sqlite` is ignored by Git and is stored on the computer running the server.
+This local starter is **not ready for 10,000 concurrent users**. The server uses Node's synchronous `DatabaseSync` SQLite API and keeps media in SQLite; synchronous database calls block the Node event loop, and a single local SQLite file cannot be shared safely across horizontally scaled instances. The current lobby poll also repeats every 1.8 seconds per active member.
+
+I ran a local read-only burst of 10,000 `/api/feed` requests at 100 concurrent requests: zero failures, p50 80 ms, p95 128 ms, total 8.49 seconds on this development machine. That is a request burst from one process, **not** a 10,000-user concurrency test. It excludes sign-ins, feed writes, media upload/download, live chat fan-out, and different phones/network latency.
+
+For a real 10,000-user load test, first move the data to managed PostgreSQL, media to object storage/CDN, chat and room events to WebSockets backed by shared pub/sub, and run multiple stateless app instances behind a load balancer. Then exercise staged concurrent virtual users with realistic feed, chat, and upload workloads while observing latency, errors, CPU, memory, database connections, and bandwidth. The local burst above is only a smoke benchmark; it does not predict capacity or cost.
+
+## Game and safety boundaries
+
+Truth or Dare now has a game-room screen, configurable 2/5/10/15/20 player selection and five age-appropriate prompt levels. Two animated spins choose different joined room members; answers and passes are posted to the lobby chat, while scores and spectator eligibility are saved to SQLite for that lobby. Game state and turns are not yet synchronized as one authoritative session across every tester’s device, so use it as a cooperative prototype rather than a competitive result. The 18+ level stays disabled because Trude does not verify age.
+
+Google sign-in, email/SMS delivery, AI image generation, licensed music, advanced media export, real-money rewards, production streaming, end-to-end encrypted chat, and production moderation are not connected.
+
+`data/trude.sqlite` contains local test accounts and is ignored by Git. Back it up before moving or replacing the database.
